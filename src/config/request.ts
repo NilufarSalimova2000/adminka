@@ -1,15 +1,15 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie'
 
-export const request = axios.create({
-  baseURL: "http://localhost:8000"
-});
+export const request = axios.create({ baseURL: "http://localhost:8000" });
 
 request.interceptors.request.use((config) => {
-  const token = Cookies.get("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${Cookies.get("token")}`;
+  if(config.url !== '/api/admin-login/'){
+   config.headers.Authorization = `Token ${Cookies.get('token')}`;
   }
-
   return config;
-});
+},
+  (config)=> {
+    return Promise.reject(config);
+  }
+);

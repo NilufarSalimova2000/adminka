@@ -16,9 +16,9 @@ export const Login: React.FC = () => {
 
   const submit = (data: LoginData): void => {
     mutate(data, {
-      onSuccess: (res: string) => {
+      onSuccess: (res) => {
         message.success("Muvaffaqiyatli o'tdingiz");
-        Cookies.set("token", res);
+        Cookies.set("token", res.token);
         navigate("/app");
       },
       onError: (error: unknown) => {
