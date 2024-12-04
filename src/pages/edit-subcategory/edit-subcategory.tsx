@@ -1,16 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useEditCategory } from "./service/useEditCategory";
 import { useGetSingleCategory } from "../category-list/service/query/useGetSingleCategory";
 import { Tabs, TabsProps, message } from "antd";
 import { RcFile } from "antd/es/upload";
 import { FormCreate } from "../../components/form-create";
+import { useEditCategory } from "../edit-category/service/useEditCategory";
 
 interface FormDatas {
     title: string;
     image?: { file: RcFile };
 }
 
-export const EditCategory = () => {
+export const EditSubcategory = () => {
     const { id } = useParams();
     console.log(id);
 
@@ -29,7 +29,7 @@ export const EditCategory = () => {
             {
                 onSuccess: (data) => {
                     message.success("Muvaffaqiyatli o'zgartirildi");
-                    navigate("/app");
+                    navigate("/app/subcategory");
                     console.log(data);
 
                 },
@@ -48,7 +48,7 @@ export const EditCategory = () => {
       const items: TabsProps['items'] = [
         {
           key: '1',
-          label: 'Category edit',
+          label: 'Subcategory edit',
           children: <FormCreate submit={submit} data={singleData} />,
         },
         {

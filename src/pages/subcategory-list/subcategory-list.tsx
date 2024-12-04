@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useGetCategory } from "./service/query/useGetCategory"
 import { Button, Popconfirm, Table, message } from "antd";
 import React from "react";
-import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
+import { useGetSubcategory } from "./service/query/useGetSubcategory";
+import { useDeleteSubcategory } from "./service/mutation/useDeleteSubcategory";
 
 interface columnType {
     title: string,
@@ -11,28 +11,30 @@ interface columnType {
     render?: any
 }
 
-interface DataType {
+export interface DataType {
     key: number;
     id: number;
     image: string;
     title: string;
+    parent?: string | any;
 }
 
-export const CategoryList: React.FC = () => {
+export const SubcategoryList: React.FC = () => {
     const navigate = useNavigate();
-    const { data } = useGetCategory();
-    const dataSource = data?.results.map((item) => {
+    const { data } = useGetSubcategory();
+    const dataSource = data?.results.map((item: DataType | any) => {
         return {
             key: item.id,
             id: item.id,
             img: item.image,
-            title: item.title,
+            title: item?.title,
+            parent: item.parent?.title,
         }
     })
 
-    const { mutate } = useDeleteCategory();
+    const { mutate } = useDeleteSubcategory();
 
-    const deleteCategory = (id: number) => {
+    const deleteSubcategory = (id: number) => {
         mutate(id, {
             onSuccess: () => {
                 message.success("Muvaffaqiyatli o'chirildi")
@@ -50,11 +52,16 @@ export const CategoryList: React.FC = () => {
             key: 'id',
         },
         {
+            title: "Parent",
+            dataIndex: "parent",
+            key: "parent",
+        },
+        {
             title: 'IMG',
             dataIndex: 'img',
             key: 'img',
             render: (image: string) => (
-                <div style={{ textAlign: "center" }}>
+                <div>
                     <img style={{
                         width: "80px",
                     }} src={image} alt="imag" />
@@ -74,10 +81,10 @@ export const CategoryList: React.FC = () => {
                 <div style={{ display: "flex", gap: "15px" }}>
                     <Popconfirm title="Delete the task"
                         description="O'chirishni istaysizmi?"
-                        onConfirm={() => deleteCategory(record.id)}
+                        onConfirm={() => deleteSubcategory(record.id)}
                         okText="Yes"
                         cancelText="No"><Button type="primary">Delete</Button></Popconfirm>
-                    <Button type="primary" onClick={() => navigate(`/app/edit-category/${record.id}`)}>Edit</Button>
+                    <Button type="primary" onClick={() => navigate(`/app/edit-subcategory/${record.id}`)}>Edit</Button>
                 </div>
             )
         }
@@ -85,8 +92,8 @@ export const CategoryList: React.FC = () => {
 
 
     return (
-        <div style={{ height: "86vh", overflowY: "scroll" }}>
-            <Button onClick={() => navigate("/app/create-category")} type="primary" variant="dashed">Create</Button>
+        <div className="table-wrapper">
+            <Button onClick={() => navigate("/app/create-subcategory")} type="primary" variant="dashed">Create subcategory</Button>
             <div style={{ marginTop: '20px' }}>
                 <Table columns={columns} dataSource={dataSource} />
             </div>

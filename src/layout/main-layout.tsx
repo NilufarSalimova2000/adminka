@@ -24,9 +24,9 @@ export const MainLayout: React.FC = () => {
     }
     return (
         <div className="wrapper">
-      <Layout style={{ height: "100%" }}>
+      <Layout style={{ height: "100vh" }}>
         <header style={{backgroundColor: "#001529", padding: "20px 0"}}>
-          <Button style={{ backgroundColor: "transparent", border: "none", marginLeft: "200px" }} onClick={() => setCollapsed(!collapsed)}>
+          <Button style={{ backgroundColor: "transparent", border: "none", marginLeft: "250px" }} onClick={() => setCollapsed(!collapsed)}>
             <MenuIcon />
           </Button>
         </header>
@@ -37,7 +37,9 @@ export const MainLayout: React.FC = () => {
             collapsed={collapsed}
             onCollapse={(value) => setCollapsed(value)}
             width={300}
-            style={{minHeight: "calc(100vh - 80px)"}}
+            style={{
+              height: "calc(90vh)",
+            }}
           >
             <Menu
               mode="inline"
