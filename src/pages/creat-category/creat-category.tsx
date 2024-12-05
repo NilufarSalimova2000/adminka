@@ -54,7 +54,7 @@ export const CreateCategory = () => {
                 client.invalidateQueries(["subcategory"]);
                 message.success("Muvaffaqiyatli subcategory yaratildi");
                 subcategoryForm.resetFields();
-                navigate("/app/subcategory");
+                navigate("/app");
             },
             onError: () => {
                 message.error("Subcategory yaratishda xatolik yuz berdi");

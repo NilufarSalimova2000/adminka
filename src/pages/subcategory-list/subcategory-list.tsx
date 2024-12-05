@@ -92,7 +92,7 @@ export const SubcategoryList: React.FC = () => {
 
 
     return (
-        <div className="table-wrapper">
+        <div style={{ height: "86vh", overflowY: "scroll" }}>
             <Button onClick={() => navigate("/app/create-subcategory")} type="primary" variant="dashed">Create subcategory</Button>
             <div style={{ marginTop: '20px' }}>
                 <Table columns={columns} dataSource={dataSource} />

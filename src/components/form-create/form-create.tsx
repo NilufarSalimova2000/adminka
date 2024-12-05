@@ -1,27 +1,38 @@
-import { Button, Form, Input, Upload } from "antd";
+import { Button, Form, Input, Upload, UploadFile } from "antd";
 import { UploadOutlined } from '@ant-design/icons';
 
 interface FormType {
     submit?: (values: any) => void;
-    data?: object;
+    data?: { title?: string; image?: string; parent?: number; id: string };
     form?: any;
-  }
-export const FormCreate:React.FC<FormType> = ({ data, submit, form }) => {
+}
+export const FormCreate: React.FC<FormType> = ({ data, submit, form }) => {
+    const defaultFileList: UploadFile[] = data?.image
+        ? [
+            {
+                uid: "-1",
+                name: "Current Image",
+                status: "done",
+                url: data.image,
+            },
+        ]
+        : [];
 
     return (
-        <div style={{maxWidth: "500px"}}>
+        <div style={{ maxWidth: "500px" }}>
             <Form initialValues={{ ...data }} form={form} layout="vertical" name="creat" onFinish={submit} >
                 <Form.Item name={"title"} label={"Category name"} rules={[{ required: true, message: 'Please input your name!' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name={"image"}  valuePropName="file" label={"Image"}>
+                <Form.Item name={"image"} valuePropName="file" label={"Image"} rules={[{ required: true, message: 'Ramm yuklang' }]}>
                     <Upload
                         listType="picture"
                         accept="image"
                         beforeUpload={() => false}
+                        defaultFileList={defaultFileList}
                     >
                         <Button type="primary" icon={<UploadOutlined />}>
-                            Upload 
+                            Upload
                         </Button>
                     </Upload>
                 </Form.Item>
