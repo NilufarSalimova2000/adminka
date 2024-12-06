@@ -4,6 +4,7 @@ import { Tabs, TabsProps, message } from "antd";
 import { RcFile } from "antd/es/upload";
 import { FormCreate } from "../../components/form-create";
 import { useEditCategory } from "../edit-category/service/useEditCategory";
+// import { AttributeForm } from "../../components/atribute-form";
 
 interface FormDatas {
     title: string;
@@ -53,8 +54,8 @@ export const EditSubcategory = () => {
         },
         {
           key: '2',
-          label: 'Tab 2',
-          children: 'Content of Tab Pane 2',
+          label: 'Attribute edit',
+        //   children: <AttributeForm />
         },
       ];
 
