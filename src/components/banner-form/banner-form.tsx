@@ -3,10 +3,10 @@ import { UploadOutlined } from '@ant-design/icons';
 
 interface FormType {
     submit?: (values: any) => void;
-    data?: { title?: string; image?: string; parent?: number; id: string };
+    data?: { title?: string; image?: string; description: string, id: string };
     form?: any;
 }
-export const FormCreate: React.FC<FormType> = ({ data, submit, form }) => {
+export const BannerForm: React.FC<FormType> = ({ data, submit, form }) => {
     const defaultFileList: UploadFile[] = data?.image
         ? [
             {
@@ -18,21 +18,13 @@ export const FormCreate: React.FC<FormType> = ({ data, submit, form }) => {
         ]
         : [];
 
-    // const handleSubmit = (values: any) => {
-    //     if (submit) {
-    //         submit({
-    //             title: values.title,
-    //             image: values.image ? values.image[0].originFileObj : null,
-    //             parent: values.parent,
-    //         });
-    //     }
-    // };
-
-
     return (
         <div style={{ maxWidth: "500px" }}>
             <Form initialValues={{ ...data }} form={form} layout="vertical" name="creat" onFinish={submit} >
-                <Form.Item name={"title"} label={"Category name"} rules={[{ required: true, message: 'Please input your name!' }]}>
+                <Form.Item name={"title"} label={"Tile"} rules={[{ required: true, message: 'Please input your name!' }]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item name={"description"} label={"Description"} rules={[{ required: true, message: 'Please input your name!' }]}>
                     <Input />
                 </Form.Item>
                 <Form.Item name={"image"} valuePropName="file" label={"Image"} rules={[{ required: true, message: 'Ramm yuklang' }]}>

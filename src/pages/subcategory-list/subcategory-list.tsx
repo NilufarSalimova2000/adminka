@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Popconfirm, Table, message } from "antd";
+import { Button, Image, Popconfirm, Table, message } from "antd";
 import React from "react";
 import { useGetSubcategory } from "./service/query/useGetSubcategory";
 import { useDeleteSubcategory } from "./service/mutation/useDeleteSubcategory";
@@ -62,7 +62,7 @@ export const SubcategoryList: React.FC = () => {
             key: 'img',
             render: (image: string) => (
                 <div>
-                    <img style={{
+                    <Image style={{
                         width: "80px",
                     }} src={image} alt="imag" />
                 </div>

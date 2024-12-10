@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useGetCategory } from "./service/query/useGetCategory"
 import { Button, Image, Popconfirm, Table, message } from "antd";
 import React from "react";
-import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
+import { useGetBanner } from "./service/query/useGetBanner";
+import { useDeleteBanner } from "./service/mutation/useDeleteBanner";
 
 interface columnType {
     title: string,
@@ -18,21 +18,24 @@ interface DataType {
     title: string;
 }
 
-export const CategoryList: React.FC = () => {
+export const BannerList: React.FC = () => {
     const navigate = useNavigate();
-    const { data } = useGetCategory();
+    const { data } = useGetBanner();
+    console.log(data);
+    
     const dataSource = data?.results.map((item) => {
         return {
             key: item.id,
             id: item.id,
             img: item.image,
             title: item.title,
+            description: item.description
         }
     })
 
-    const { mutate } = useDeleteCategory();
+    const { mutate } = useDeleteBanner();
 
-    const deleteCategory = (id: number) => {
+    const deleteBanner = (id: number) => {
         mutate(id, {
             onSuccess: () => {
                 message.success("Muvaffaqiyatli o'chirildi")
@@ -62,9 +65,14 @@ export const CategoryList: React.FC = () => {
             ),
         },
         {
-            title: 'Name',
+            title: 'Title',
             dataIndex: 'title',
             key: 'title',
+        },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description',
         },
         {
             title: 'Change',
@@ -74,10 +82,10 @@ export const CategoryList: React.FC = () => {
                 <div style={{ display: "flex", gap: "15px" }}>
                     <Popconfirm title="Delete the task"
                         description="O'chirishni istaysizmi?"
-                        onConfirm={() => deleteCategory(record.id)}
+                        onConfirm={() => deleteBanner(record.id)}
                         okText="Yes"
                         cancelText="No"><Button type="primary">Delete</Button></Popconfirm>
-                    <Button type="primary" onClick={() => navigate(`/app/edit-category/${record.id}`)}>Edit</Button>
+                    <Button type="primary" onClick={() => navigate(`/app/edit-banner/${record.id}`)}>Edit</Button>
                 </div>
             )
         }
@@ -86,7 +94,7 @@ export const CategoryList: React.FC = () => {
 
     return (
         <div style={{ height: "86vh", overflowY: "scroll" }}>
-            <Button onClick={() => navigate("/app/create-category")} type="primary" variant="dashed">Create</Button>
+            <Button onClick={() => navigate("/app/create-banner")} type="primary" variant="dashed">Create banner</Button>
             <div style={{ marginTop: '20px' }}>
                 <Table columns={columns} dataSource={dataSource} />
             </div>

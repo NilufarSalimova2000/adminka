@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export const useEditCategory = () => {
     return useMutation({
-        mutationFn: ({id, data}: any) => request.put(`/category/${id}/`, data).then((res) => res.data),
+        mutationFn: ({id, data}: any) => request.patch(`/category/${id}/`, data).then((res) => res.data),
         onSuccess: (_, { id }) => {
             client.invalidateQueries(["category"])
             client.invalidateQueries(["singleCategory", id])
