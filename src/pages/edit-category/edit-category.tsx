@@ -2,12 +2,11 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useEditCategory } from "./service/useEditCategory";
 import { useGetSingleCategory } from "../category-list/service/query/useGetSingleCategory";
 import { Tabs, TabsProps, message } from "antd";
-import { RcFile } from "antd/es/upload";
 import { FormCreate } from "../../components/form-create";
 
 interface FormDatas {
     title: string;
-    image?: { file: RcFile };
+    image?: { fileList: { originFileObj: File }[] };
 }
 
 export const EditCategory = () => {
@@ -20,8 +19,9 @@ export const EditCategory = () => {
     const submit = (data: FormDatas) => {
         const formData = new FormData();
         formData.append("title", data.title);
-        if (data.image) {
-            formData.append("image", data.image.file);
+        if (data.image && data.image.fileList && data.image.fileList[0]) {
+            const file = data.image.fileList[0].originFileObj; // Faylni olish
+            formData.append("image", file); // Faylni formData ga qo'shish
         }
 
         mutate(

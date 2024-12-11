@@ -29,9 +29,10 @@ export const FormWithselect: React.FC<FormType> = ({ data, submit, form }) => {
                 </Form.Item>
                 <Form.Item name={"image"} valuePropName="file" label={"Image"}>
                     <Upload
-                        listType="picture"
+                        listType="picture-card"
                         accept="image"
                         beforeUpload={() => false}
+                        maxCount={1}
                     >
                         <Button type="primary" icon={<UploadOutlined />}>
                             Upload

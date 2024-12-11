@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useGetSingleCategory } from "../category-list/service/query/useGetSingleCategory";
 import { Tabs, TabsProps, message } from "antd";
-import { RcFile } from "antd/es/upload";
 import { FormCreate } from "../../components/form-create";
 import { useEditCategory } from "../edit-category/service/useEditCategory";
 import { useEditAttribute } from "../../components/attribute/service/mutation/useEditAttribute";
@@ -9,7 +8,7 @@ import { AttributeForm } from "../../components/atribute-form";
 
 interface FormData {
     title: string;
-    image?: { file: RcFile };
+    image?: { fileList: { originFileObj: File }[] };
 }
 
 interface AttributeValuesType {
@@ -23,17 +22,6 @@ interface AttributeValuesType {
     attributes?: string[] | any;
 }
 
-// interface AttributeValuesType {
-//     title?: string;
-//     values?: {
-//       value?: string;
-//       value_id?: number;
-//     }[];
-//     category_id?: number;
-//     attribute_id?: number;
-//     attributes?: string[] | any;
-//   }
-
 export const EditSubcategory = () => {
     const { id } = useParams();
     const { data: singleData, isLoading } = useGetSingleCategory(id);
@@ -44,9 +32,10 @@ export const EditSubcategory = () => {
     const submitSub = (data: FormData) => {
         const formData = new FormData();
         formData.append("title", data.title);
-        if (data.image) {
-            formData.append("image", data.image.file);
-        }
+        if (data.image && data.image.fileList && data.image.fileList[0]) {
+          const file = data.image.fileList[0].originFileObj; // Faylni olish
+          formData.append("image", file); // Faylni formData ga qo'shish
+      }
 
         mutate({ id, data: formData }, {
             onSuccess: () => {
@@ -59,40 +48,42 @@ export const EditSubcategory = () => {
         });
     }
 
-    const AttributeId = singleData?.attributes?.map((item: any) => item.id);
-    const valueId = singleData?.attributes?.map((item: any) =>
+
+    const AttributeId = singleData?.attributes?.map(
+        (item: number | any) => item.id
+      );
+      const valueId = singleData?.attributes?.map((item: number | any) =>
         item.values.map((subItem: any) => subItem.id)
-    );
-
-    const submitAttribute = (values: any) => {
-
-        const processedAttributes = Array.isArray(values?.attributes)
-            ? values.attributes.map((item: AttributeValuesType, index: number) => ({
-                attribute_id: AttributeId?.[index] ?? null, // Tekshirish qo'shildi
-                title: item?.title ?? '', // Default qiymat
-                values: Array.isArray(item?.values) // Null yoki undefined emasligini tekshiramiz
-                    ? item.values.map((subItem, subIndex) => ({
-                        value: subItem?.value ?? '', // Default qiymat
-                        value_id: valueId?.[index]?.[subIndex] ?? null, // Tekshirish qo'shildi
-                    }))
-                    : [] // Agar item.values bo'sh bo'lsa, bo'sh massiv qaytariladi
-            }))
-            : [];
-
+      );
+      const submitAttribute = (values: AttributeValuesType) => {
+        const processedAttributes = [
+          ...values?.attributes?.map(
+            (item: AttributeValuesType, index: number) => ({
+              attribute_id: AttributeId[index] ?? null,
+              title: item.title,
+              values: item.values?.map((subItem, subIndex) => ({
+                value: subItem.value,
+                value_id: valueId[index]?.[subIndex] ?? null,
+              })),
+            })
+          ),
+        ];
         attributeEdit(
-            { attributes: processedAttributes, category_id: Number(id) },
-            {
-                onSuccess: () => {
-                    message.success("Attribute muvaffaqiyatli o'zgartirildi");
-                    navigate("/app/subcategory");
-                },
-                onError: (err) => {
-                    message.error("Xatolik");
-                    console.error(err);
-                },
-            }
+          { attributes: processedAttributes, category_id: Number(id) },
+          {
+            onSuccess: () => {
+              message.success("Attributes updated successfully!");
+              navigate("/app/subcategory");
+            },
+            onError: (err) => {
+              message.error("Failed to update attributes!");
+              console.error( err);
+            },
+          }
         );
-    };
+      };
+    
+    
 
 
     const items: TabsProps['items'] = [
@@ -104,7 +95,7 @@ export const EditSubcategory = () => {
         {
             key: '2',
             label: 'Attribute edit',
-            children: <AttributeForm onSubmit={submitAttribute} data={singleData} isLoading={isLoading} />
+            children: <AttributeForm submit={submitAttribute} data={singleData} isLoading={isLoading} />
         },
     ];
 

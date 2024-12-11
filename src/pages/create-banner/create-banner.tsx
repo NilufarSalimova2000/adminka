@@ -11,7 +11,7 @@ export const CreateBanner:React.FC = () => {
     const [bannerForm] = Form.useForm();
     const navigate = useNavigate();
 
-    const submit = (values: { title: string; description: string, image: { file: RcFile }}) => {
+    const submit = (values: { title: string; description: string; image: { file: RcFile }}) => {
         const formData = new FormData();
         formData.append("title", values.title);
         formData.append("description", values.description);

@@ -86,7 +86,7 @@ export const CategoryList: React.FC = () => {
 
     return (
         <div style={{ height: "86vh", overflowY: "scroll" }}>
-            <Button onClick={() => navigate("/app/create-category")} type="primary" variant="dashed">Create</Button>
+            <Button onClick={() => navigate("/app/create-category")} type="primary" variant="dashed">Create category</Button>
             <div style={{ marginTop: '20px' }}>
                 <Table columns={columns} dataSource={dataSource} />
             </div>

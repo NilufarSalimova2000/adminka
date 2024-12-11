@@ -77,7 +77,7 @@ export const CreateSubcategory = () => {
         {
             key: "2",
             label: "Attribute",
-            children: <AttributeForm onSubmit={submitAttribute} />,
+            children: <AttributeForm submit={submitAttribute} />,
         },
     ];
 

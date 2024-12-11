@@ -11,7 +11,6 @@ export const FormCreate: React.FC<FormType> = ({ data, submit, form }) => {
         ? [
             {
                 uid: "-1",
-                name: "Current Image",
                 status: "done",
                 url: data.image,
             },
@@ -32,15 +31,16 @@ export const FormCreate: React.FC<FormType> = ({ data, submit, form }) => {
     return (
         <div style={{ maxWidth: "500px" }}>
             <Form initialValues={{ ...data }} form={form} layout="vertical" name="creat" onFinish={submit} >
-                <Form.Item name={"title"} label={"Category name"} rules={[{ required: true, message: 'Please input your name!' }]}>
+                <Form.Item name={"title"} label={"Name"} rules={[{ required: true, message: 'Please input your name!' }]}>
                     <Input />
                 </Form.Item>
                 <Form.Item name={"image"} valuePropName="file" label={"Image"} rules={[{ required: true, message: 'Ramm yuklang' }]}>
                     <Upload
-                        listType="picture"
+                        listType="picture-card"
                         accept="image"
                         beforeUpload={() => false}
                         defaultFileList={defaultFileList}
+                        maxCount={1}
                     >
                         <Button type="primary" icon={<UploadOutlined />}>
                             Upload

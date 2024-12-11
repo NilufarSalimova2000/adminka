@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Image, Popconfirm, Table, message } from "antd";
 import React from "react";
-import { useGetBanner } from "./service/query/useGetBanner";
-import { useDeleteBanner } from "./service/mutation/useDeleteBanner";
+import { useGetBrand } from "./service/query/useGetBrand";
+import { useDeleteBrand } from "./service/mutation/useDeleteBrand";
 
 interface columnType {
     title: string,
@@ -16,12 +16,11 @@ interface DataType {
     id: number;
     image: string;
     title: string;
-    description: string;
 }
 
-export const BannerList: React.FC = () => {
+export const BrandList: React.FC = () => {
     const navigate = useNavigate();
-    const { data } = useGetBanner();
+    const { data } = useGetBrand();
     
     const dataSource = data?.results.map((item) => {
         return {
@@ -29,11 +28,10 @@ export const BannerList: React.FC = () => {
             id: item.id,
             img: item.image,
             title: item.title,
-            description: item.description
         }
     })
 
-    const { mutate } = useDeleteBanner();
+    const { mutate } = useDeleteBrand();
 
     const deleteBanner = (id: number) => {
         mutate(id, {
@@ -53,7 +51,7 @@ export const BannerList: React.FC = () => {
             key: 'id',
         },
         {
-            title: 'IMG',
+            title: 'IMAG',
             dataIndex: 'img',
             key: 'img',
             render: (image: string) => (
@@ -70,11 +68,6 @@ export const BannerList: React.FC = () => {
             key: 'title',
         },
         {
-            title: 'Description',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
             title: 'Change',
             dataIndex: 'change',
             key: 'action',
@@ -85,7 +78,7 @@ export const BannerList: React.FC = () => {
                         onConfirm={() => deleteBanner(record.id)}
                         okText="Yes"
                         cancelText="No"><Button type="primary">Delete</Button></Popconfirm>
-                    <Button type="primary" onClick={() => navigate(`/app/edit-banner/${record.id}`)}>Edit</Button>
+                    <Button type="primary" onClick={() => navigate(`/app/edit-brand/${record.id}`)}>Edit</Button>
                 </div>
             )
         }
@@ -94,7 +87,7 @@ export const BannerList: React.FC = () => {
 
     return (
         <div style={{ height: "86vh", overflowY: "scroll" }}>
-            <Button onClick={() => navigate("/app/create-banner")} type="primary" variant="dashed">Create banner</Button>
+            <Button onClick={() => navigate("/app/create-brand")} type="primary" variant="dashed">Create brand</Button>
             <div style={{ marginTop: '20px' }}>
                 <Table columns={columns} dataSource={dataSource} />
             </div>

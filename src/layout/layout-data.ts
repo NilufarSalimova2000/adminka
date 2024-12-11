@@ -1,4 +1,4 @@
-import { DatabaseOutlined, FileAddOutlined, PictureOutlined } from "@ant-design/icons";
+import { DatabaseOutlined, FileAddOutlined, PictureOutlined, ApartmentOutlined, AppstoreOutlined } from "@ant-design/icons";
 
 export const navList = [
     {
@@ -18,5 +18,17 @@ export const navList = [
         label: "Banner list",
         path:"/app/banner",
         icon: PictureOutlined,
+    },
+    {
+        id: 4,
+        label: "Brand list",
+        path:"/app/brand",
+        icon: AppstoreOutlined,
+    },
+    {
+        id: 5,
+        label: "Product list",
+        path:"/app/product",
+        icon: ApartmentOutlined,
     },
 ]
