@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useGetCategory } from "./service/query/useGetCategory"
-import { Button, Image, Popconfirm, Table, message } from "antd";
+import { useGetCategory } from "./service/query/useGetCategory";
+import { Button, Form, Image, Input, Popconfirm, Table, message } from "antd";
 import React from "react";
 import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
+import { useDebounce } from "../../hooks/useDebounce";
+import { useSearchCategory } from "./service/query/useSearchCategory";
 
 interface columnType {
     title: string,
@@ -19,6 +21,10 @@ interface DataType {
 }
 
 export const CategoryList: React.FC = () => {
+    const [input, setinput] = React.useState("");
+    const debounce = useDebounce(input);
+    const { data: dataSearch = { results: [] } } = useSearchCategory(debounce);
+
     const navigate = useNavigate();
     const { data } = useGetCategory();
     const dataSource = data?.results.map((item) => {
@@ -54,7 +60,7 @@ export const CategoryList: React.FC = () => {
             dataIndex: 'img',
             key: 'img',
             render: (image: string) => (
-                <div style={{ textAlign: "center" }}>
+                <div>
                     <Image style={{
                         width: "80px",
                     }} src={image} alt="imag" />
@@ -86,7 +92,31 @@ export const CategoryList: React.FC = () => {
 
     return (
         <div style={{ height: "86vh", overflowY: "scroll" }}>
-            <Button onClick={() => navigate("/app/create-category")} type="primary" variant="dashed">Create category</Button>
+            <div style={{ display: "flex", gap: "40px" }}>
+                <Button onClick={() => navigate("/app/create-category")} type="primary" variant="dashed">Create category</Button>
+                <Form>
+                    <Form.Item >
+                        <Input style={{ width: "500px" }} placeholder="Search..." value={input} onChange={(e) => setinput(e.target.value)} />
+                    </Form.Item>
+                </Form>
+            </div>
+            {input ? (
+                // Qidiruv bo'lsa
+                Array.isArray(dataSearch?.results) && dataSearch.results.length > 0 ? (
+                    dataSearch.results.map((item) => (
+                        <div key={item.id} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <Image style={{ width: '50px' }} src={item.image} alt={item.title} />
+                            <p>{item.title}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>Ma'lumot topilmadi.</p> // Faqat qidiruv natijalari bo'lmasa
+                )
+            ) : (
+                // Qidiruv bo'lmasa, hech narsa ko'rsatilmasin
+                <></>
+            )}
+
             <div style={{ marginTop: '20px' }}>
                 <Table columns={columns} dataSource={dataSource} />
             </div>

@@ -16,6 +16,9 @@ import { CreateBrand } from "../pages/create-brand";
 import { EditBrand } from "../pages/edit-brand";
 import { CreateProduct } from "../pages/create-product";
 import { EditProduct } from "../pages/edit-product";
+import { ProductVariants } from "../pages/product-variants";
+import { CreateProductVariants } from "../pages/create-product-variants";
+import { VariantsImage } from "../pages/product-variants/Variants-image";
 
 
 export const Router = () => {
@@ -37,6 +40,9 @@ export const Router = () => {
             <Route path="product" element={<ProductList />} />
             <Route path="create-product" element={<CreateProduct />} />
             <Route path="edit-product/:id" element={<EditProduct />} />
+            <Route path="product-variants/:id" element={<ProductVariants />} />
+            <Route path="create-product-variants/:id" element={<CreateProductVariants />} />
+            <Route path="variants-image/:id" element={<VariantsImage />} />
         </Route>
     </Routes>
 }

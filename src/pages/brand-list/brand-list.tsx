@@ -55,7 +55,7 @@ export const BrandList: React.FC = () => {
             dataIndex: 'img',
             key: 'img',
             render: (image: string) => (
-                <div style={{ textAlign: "center" }}>
+                <div>
                     <Image style={{
                         width: "80px",
                     }} src={image} alt="imag" />

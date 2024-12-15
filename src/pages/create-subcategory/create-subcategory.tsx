@@ -40,11 +40,20 @@ export const CreateSubcategory = () => {
         });
     };
 
+    // const submitAttribute = (data: any) => {
+    //     const formattedData = {
+    //         attr_list: data.items.map((item: any) => ({
+    //             title: item.name,
+    //             values: item.list?.map((subItem: any) => subItem.first) || [],
+    //             category: [subcategoryId],
+    //         })),
+    //     };
+
     const submitAttribute = (data: any) => {
         const formattedData = {
-            attr_list: data.items.map((item: any) => ({
-                title: item.name,
-                values: item.list?.map((subItem: any) => subItem.first) || [],
+            attr_list: (data?.items || []).map((item: any) => ({
+                title: item.name || "Untitled", // Standart qiymat
+                values: (item.list || []).map((subItem: any) => subItem.first),
                 category: [subcategoryId],
             })),
         };

@@ -1,11 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Form, Image, Input, Popconfirm, Table, message } from "antd";
 import React from "react";
-import { useGetProducts } from "./service/query/useGetProducts";
-import { useDeleteProducts } from "./service/mutation/useDeleteProduct";
+import { useGetProductVariants } from "./service/query/useGetProductVariants";
+import { useDeleteProductVariants } from "./service/mutation/useDeleteProductVariants";
+import { useSearchVariant } from "./service/query/useSearchVariant";
 import { useDebounce } from "../../hooks/useDebounce";
-import { useSearchProduct } from "./service/query/useSearchProduct";
-
 
 interface columnType {
     title: string,
@@ -14,35 +13,38 @@ interface columnType {
     render?: any
 }
 
-interface Type {
+interface DataType {
     key: number;
     id: number;
-    image: string;
+    images: {
+        image: string,
+        order: number,
+    }[],
     title: string;
-    price: string;
 }
 
-export const ProductList: React.FC = () => {
+export const ProductVariants: React.FC = () => {
     const [input, setinput] = React.useState("");
     const debounce = useDebounce(input);
-    const { data: dataSearch = { results: [] } } = useSearchProduct(debounce);
+    const { data: dataSearch = { results: [] } } = useSearchVariant(debounce);
 
     const navigate = useNavigate();
-    const { data } = useGetProducts();
+    const paramID = useParams();
+    const { data } = useGetProductVariants(Number(paramID.id)); // Mahsulot ID'si bo'yicha so'rov
 
-    const dataSource = data?.results.map((item) => {
-        return {
+
+    const dataSource = data?.results
+        .filter(item => item.product === Number(paramID.id)) // Filtrlash
+        .map(item => ({
             key: item.id,
             id: item.id,
-            img: item.image,
+            img: item.images,
             title: item.title,
-            price: item.price
-        }
-    })
+        }));
 
-    const { mutate } = useDeleteProducts();
+    const { mutate } = useDeleteProductVariants();
 
-    const deleteProduct = (id: number) => {
+    const deleteVariants = (id: number) => {
         mutate(id, {
             onSuccess: () => {
                 message.success("Muvaffaqiyatli o'chirildi")
@@ -63,11 +65,16 @@ export const ProductList: React.FC = () => {
             title: 'IMAG',
             dataIndex: 'img',
             key: 'img',
-            render: (image: string) => (
+            render: (images: { image: string, order: number }[]) => (
                 <div>
-                    <Image style={{
-                        width: "80px",
-                    }} src={image} alt="imag" />
+                    <Image
+                        style={{
+                            width: "80px",
+                        }}
+                        src={images?.[0]?.image || undefined} // Birinchi tasvirni tanlang, aks holda undefined
+                        alt="imag"
+                        fallback="https://via.placeholder.com/80?text=No+Image" // Fallback tasvir
+                    />
                 </div>
             ),
         },
@@ -77,24 +84,17 @@ export const ProductList: React.FC = () => {
             key: 'title',
         },
         {
-            title: 'Price',
-            dataIndex: 'price',
-            key: 'price',
-        },
-        {
             title: 'Change',
             dataIndex: 'change',
             key: 'action',
-            render: (_: any, record: Type) => (
-                <div style={{ display: "flex", gap: "10px" }}>
+            render: (_: any, record: DataType) => (
+                <div style={{ display: "flex", gap: "15px" }}>
                     <Popconfirm title="Delete the task"
                         description="O'chirishni istaysizmi?"
-                        onConfirm={() => deleteProduct(record.id)}
+                        onConfirm={() => deleteVariants(record.id)}
                         okText="Yes"
                         cancelText="No"><Button type="primary">Delete</Button></Popconfirm>
-                    <Button type="primary" onClick={() => navigate(`/app/edit-product/${record.id}`)}>Edit</Button>
-                    <Link to={`/app/product-variants/${record.id}`}> <Button type="primary">Variants</Button></Link>
-                    <Button type="primary">Category</Button>
+                    <Button type="primary" onClick={() => navigate(`/app/variants-image/${record.id}`)}>Upload image</Button>
                 </div>
             )
         }
@@ -104,7 +104,9 @@ export const ProductList: React.FC = () => {
     return (
         <div style={{ height: "86vh", overflowY: "scroll" }}>
             <div style={{ display: "flex", gap: "40px" }}>
-                <Button onClick={() => navigate("/app/create-product")} type="primary" variant="dashed">Create product</Button>
+                <Link to={`/app/create-product-variants/${paramID.id}`}>
+                    <Button type="primary" variant="dashed">Create variants</Button>
+                </Link>
                 <Form>
                     <Form.Item >
                         <Input style={{ width: "500px" }} placeholder="Search..." value={input} onChange={(e) => setinput(e.target.value)} />
@@ -116,7 +118,11 @@ export const ProductList: React.FC = () => {
                 Array.isArray(dataSearch?.results) && dataSearch.results.length > 0 ? (
                     dataSearch.results.map((item) => (
                         <div key={item.id} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                            <Image style={{ width: '50px' }} src={item.image} alt={item.title} />
+                            {item.images && item.images.length > 0 ? (
+                                <Image style={{ width: '50px' }} src={item.images[0].image} alt={item.title} />
+                            ) : (
+                                <span>No image available</span>
+                            )}
                             <p>{item.title}</p>
                         </div>
                     ))

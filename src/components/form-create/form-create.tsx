@@ -17,17 +17,6 @@ export const FormCreate: React.FC<FormType> = ({ data, submit, form }) => {
         ]
         : [];
 
-    // const handleSubmit = (values: any) => {
-    //     if (submit) {
-    //         submit({
-    //             title: values.title,
-    //             image: values.image ? values.image[0].originFileObj : null,
-    //             parent: values.parent,
-    //         });
-    //     }
-    // };
-
-
     return (
         <div style={{ maxWidth: "500px" }}>
             <Form initialValues={{ ...data }} form={form} layout="vertical" name="creat" onFinish={submit} >
