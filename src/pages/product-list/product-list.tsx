@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Image, Input, Popconfirm, Table, message } from "antd";
 import React from "react";
 import { useGetProducts } from "./service/query/useGetProducts";
@@ -20,6 +20,7 @@ interface Type {
     image: string;
     title: string;
     price: string;
+    category?: string | number
 }
 
 export const ProductList: React.FC = () => {
@@ -36,7 +37,8 @@ export const ProductList: React.FC = () => {
             id: item.id,
             img: item.image,
             title: item.title,
-            price: item.price
+            price: item.price,
+            category: item.category
         }
     })
 
@@ -60,7 +62,7 @@ export const ProductList: React.FC = () => {
             key: 'id',
         },
         {
-            title: 'IMAG',
+            title: 'Image',
             dataIndex: 'img',
             key: 'img',
             render: (image: string) => (
@@ -93,8 +95,8 @@ export const ProductList: React.FC = () => {
                         okText="Yes"
                         cancelText="No"><Button type="primary">Delete</Button></Popconfirm>
                     <Button type="primary" onClick={() => navigate(`/app/edit-product/${record.id}`)}>Edit</Button>
-                    <Link to={`/app/product-variants/${record.id}`}> <Button type="primary">Variants</Button></Link>
-                    <Button type="primary">Category</Button>
+                    <Button onClick={() => navigate(`/app/product-variants/${record.id}`)} type="primary">Variants</Button>
+                    <Button onClick={() => navigate(`/app/edit-subcategory/${record.category}`)} type="primary">Category</Button>
                 </div>
             )
         }

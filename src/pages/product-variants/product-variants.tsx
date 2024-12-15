@@ -62,7 +62,7 @@ export const ProductVariants: React.FC = () => {
             key: 'id',
         },
         {
-            title: 'IMAG',
+            title: 'Image',
             dataIndex: 'img',
             key: 'img',
             render: (images: { image: string, order: number }[]) => (

@@ -57,7 +57,7 @@ export const SubcategoryList: React.FC = () => {
             key: "parent",
         },
         {
-            title: 'IMG',
+            title: 'Image',
             dataIndex: 'img',
             key: 'img',
             render: (image: string) => (

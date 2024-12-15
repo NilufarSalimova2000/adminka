@@ -51,11 +51,11 @@ export const EditCategory = () => {
           label: 'Category edit',
           children: <FormCreate submit={submit} data={singleData} />,
         },
-        {
-          key: '2',
-          label: 'Tab 2',
-          children: 'Content of Tab Pane 2',
-        },
+        // {
+        //   key: '2',
+        //   label: 'Tab 2',
+        //   children: 'Content of Tab Pane 2',
+        // },
       ];
 
     if (isLoading) {

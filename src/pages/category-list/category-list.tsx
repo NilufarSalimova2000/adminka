@@ -56,7 +56,7 @@ export const CategoryList: React.FC = () => {
             key: 'id',
         },
         {
-            title: 'IMG',
+            title: 'Image',
             dataIndex: 'img',
             key: 'img',
             render: (image: string) => (

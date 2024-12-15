@@ -8,6 +8,24 @@ import { useNavigate } from "react-router-dom";
 import { useCreateAttribute } from "../../components/attribute/service/mutation/useCreateAttribute";
 import { AttributeForm } from "../../components/atribute-form";
 
+interface AttributeValue {
+    category?: number[];
+    key?: number;
+    id?: number;
+    title: string;
+    values: string[];
+}
+
+interface AttributeValuesType {
+    title?: string;
+    values?: {
+        value?: string;
+        value_id?: number;
+    }[];
+    category_id?: number;
+    attribute_id?: number;
+    attributes?: string[] | any;
+}
 
 export const CreateSubcategory = () => {
     const { mutate: createSubcategory } = useCreateSubcategory();
@@ -40,31 +58,27 @@ export const CreateSubcategory = () => {
         });
     };
 
-    // const submitAttribute = (data: any) => {
-    //     const formattedData = {
-    //         attr_list: data.items.map((item: any) => ({
-    //             title: item.name,
-    //             values: item.list?.map((subItem: any) => subItem.first) || [],
-    //             category: [subcategoryId],
-    //         })),
-    //     };
 
-    const submitAttribute = (data: any) => {
+    const submitAttribute = (data: AttributeValuesType) => {
         const formattedData = {
-            attr_list: (data?.items || []).map((item: any) => ({
-                title: item.name || "Untitled", // Standart qiymat
-                values: (item.list || []).map((subItem: any) => subItem.first),
+            attr_list: data?.attributes?.map((item: AttributeValue) => ({
                 category: [subcategoryId],
+                title: item?.title,
+                values:
+                    item?.values?.map(
+                        (value: string | undefined | any) => value?.value
+                    ) || [],
             })),
         };
 
         createAttribute(formattedData, {
             onSuccess: () => {
-                message.success("Atributlar muvaffaqiyatli qo‘shildi");
-                navigate("/app/subcategory")
+                message.success("Muvaffaqiyatli attribute yaratildi");
+                navigate("/app/subcategory");
             },
-            onError: () => {
-                message.error("Atributlarni qo‘shishda xatolik yuz berdi");
+            onError: (err) => {
+                console.log(err);
+                message.error("Attribute yaratishda xatolik yuz berdi");
             },
         });
     };

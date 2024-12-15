@@ -117,6 +117,7 @@ export const ProductVariantsForm: React.FC<FormType> = ({ data, form, submit }) 
                             toolbar: [
                                 [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
                                 [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                [{ "header": [1, 2, 3, 4, 5, 6, false] }],
                                 ['bold', 'italic', 'underline'],
                                 ['link'],
                             ],

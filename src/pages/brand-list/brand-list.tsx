@@ -51,7 +51,7 @@ export const BrandList: React.FC = () => {
             key: 'id',
         },
         {
-            title: 'IMAG',
+            title: 'Image',
             dataIndex: 'img',
             key: 'img',
             render: (image: string) => (

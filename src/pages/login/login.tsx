@@ -3,21 +3,17 @@ import { useCreateLogin } from "./mutation/useCreateLogin";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
-
-interface LoginData {
-  phone_number: string;
-  password: string;
-}
+import { LoginType } from "./mutation/LoginType";
 
 export const Login: React.FC = () => {
   const { mutate } = useCreateLogin();
   const navigate = useNavigate();
-  const [form] = Form.useForm<LoginData>();
+  const [form] = Form.useForm<LoginType>();
 
-  const submit = (data: LoginData): void => {
+  const submit = (data: LoginType): void => {
     mutate(data, {
       onSuccess: (res) => {
-        message.success("Muvaffaqiyatli o'tdingiz");
+        message.success("Muvaffaqiyatli logindan o'tdingiz");
         Cookies.set("token", res.token);
         navigate("/app");
       },
